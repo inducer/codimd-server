@@ -121,7 +121,9 @@ export default class Editor {
       },
       'Shift-Ctrl-Backspace': cm => {
         utils.wrapTextWith(this.editor, cm, 'Backspace')
-      }
+      },
+      'Shift-Ctrl-[': 'fold',
+      'Shift-Ctrl-]': 'unfold'
     }
     this.eventListeners = {}
     this.config = config
@@ -592,6 +594,15 @@ export default class Editor {
       otherCursors: true,
       placeholder: "← Start by entering a title here\n===\nVisit /features if you don't know what to do.\nHappy hacking :)"
     })
+
+    CodeMirror.Vim.defineAction('fold', cm => {
+      cm.execCommand('fold')
+    })
+    CodeMirror.Vim.defineAction('unfold', cm => {
+      cm.execCommand('unfold')
+    })
+    CodeMirror.Vim.mapCommand('zc', 'action', 'fold')
+    CodeMirror.Vim.mapCommand('zo', 'action', 'unfold')
 
     return this.editor
   }
